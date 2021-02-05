@@ -1,6 +1,5 @@
 #include <iostream>
 #include <fstream>
-#include <algorithm>
 
 using namespace std;
 
@@ -18,7 +17,10 @@ long split(long *arr, long left, long right, long pivot)
         }
         if (left <= right)
         {
-            swap(arr[left], arr[right]);
+            //swap(arr[left], arr[right]);
+            long temp = arr[left];
+            arr[left] = arr[right];
+            arr[right] = temp;
             left++;
             right--;
         }
@@ -59,14 +61,56 @@ int main()
     }
     input.close();
     quicksort(arr1, 0, N - 1);
+    /*for (long i = 0; i < N; i++)
+    {
+        cout << arr1[i] << ' ';
+    }
+    cout << endl;*/
+    quicksort(arr2, 0, M - 1);
+    /*for (long i = 0; i < M; i++)
+    {
+        cout << arr2[i] << ' ';
+    }
+    cout << endl;*/
+
     ofstream output("OUTPUT.txt");
     if (!output)
     {
         exit(2);
     }
-    for (long i = 0; i < N; i++)
+    long first = 0;
+    long second = 0;
+    while (second < M)
     {
-        output << arr1[i] << ' ';
+        if (arr1[first] == arr2[second])
+        {
+            if (first == 0 || second == 0 || arr1[first] != arr1[first - 1])
+            {
+                output << arr1[first] << ' ';
+            }
+            first++;
+            if (first >= N)
+            {
+                break;
+            }
+            second++;
+            if (second >= M)
+            {
+                break;
+            }
+        }
+        while (first < N && arr1[first] < arr2[second])
+        {
+            first++;
+        }
+        if (first >= N)
+            {
+                break;
+            }
+        while (second < M && arr2[second] < arr1[first])
+        {
+            second++;
+        }
     }
     output.close();
     return 0;
